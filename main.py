@@ -10,6 +10,8 @@ import csv
 db = SqliteDatabase('self.db')
 
 
+
+
 class base(Model):
     code = CharField()
     Title = CharField()
@@ -24,7 +26,9 @@ class base(Model):
 def func(year, employer, name, title, annual_wages, source, predictedgender, nameclean):
     if nameclean is None or nameclean == '':
         return year, employer, name, title, annual_wages, source, predictedgender, nameclean, '', 0, '', 0
-    ar = base.select().where(SQL(f"Title like '%{nameclean}%'"))
+    ar = base.select().where(SQL(f"""
+    Title like "%{nameclean}%"
+    """))
     if ar.exists():
         ll = []
         for i in ar:
@@ -39,7 +43,9 @@ def func(year, employer, name, title, annual_wages, source, predictedgender, nam
     else:
         res1 = ""
         soc1 = 0
-    ar = base.select().where(SQL(f"Alternate_Title like '%{nameclean}%'"))
+    ar = base.select().where(SQL(f"""
+    Alternate_Title like "%{nameclean}%"
+    """))
     if ar.exists():
         l2 = []
         for i in ar:
@@ -87,3 +93,4 @@ if __name__ == '__main__':
             ["year", "employer", "name", "title", "annual_wages", "source", "predictedgender", "nameclean", "res1",
              "soc1", "res2", "soc2"])
         f_csv.writerows(result)
+
